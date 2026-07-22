@@ -1,104 +1,95 @@
 <!DOCTYPE html>
 <html lang="am">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>የመመዝገቢያ ገፅ | Modern Registration</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>የምዝገባ ቅጽ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .form-container {
+      background-color: #1e1e1e;
+      padding: 25px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    h2 { text-align: center; color: #4CAF50; }
+    .input-box { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input[type="text"], input[type="tel"], input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      background-color: #2b2b2b;
+      color: white;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover { background-color: #45a049; }
+  </style>
 </head>
 <body>
 
-    <div class="registration-container">
-        <div class="form-header">
-            <i class="fa-solid fa-user-plus header-icon"></i>
-            <h2>የአባልነት መመዝገቢያ Form</h2>
-            <p>እባክዎን አስፈላጊዎቹን መረጃዎች በሙሉ በትክክል ይሙሉ</p>
-        </div>
+  <div class="form-container">
+    <h2>የምዝገባ ቅጽ</h2>
+    
+    <form id="regForm">
+      <div class="input-box">
+        <label>ሙሉ ስም:</label>
+        <input type="text" name="fullName" placeholder="ስምዎን ያስገቡ" required>
+      </div>
 
-        <form id="registerForm">
-            <!-- የግል መረጃዎች -->
-            <div class="section-title">
-                <i class="fa-solid fa-id-card"></i> የግል መረጃ
-            </div>
-            
-            <div class="input-group">
-                <div class="input-box">
-                    <label>ስም <span class="required">*</span></label>
-                    <input type="text" placeholder="ለምሳሌ፡ አበበ" required>
-                </div>
-                <div class="input-box">
-                    <label>የአባት ስም <span class="required">*</span></label>
-                    <input type="text" placeholder="ለምሳሌ፡ ከበደ" required>
-                </div>
-            </div>
+      <div class="input-box">
+        <label>ስልክ ቁጥር:</label>
+        <input type="tel" name="phoneNumber" placeholder="09..." required>
+      </div>
 
-            <div class="input-group">
-                <div class="input-box">
-                    <label>የአያት ስም <span class="required">*</span></label>
-                    <input type="text" placeholder="ለምሳሌ፡ ተሰማ" required>
-                </div>
-                <div class="input-box">
-                    <label>ስልክ ቁጥር <span class="required">*</span></label>
-                    <input type="tel" placeholder="0911......" required>
-                </div>
-            </div>
+      <div class="input-box">
+        <label>የመታወቂያ ፊት ገፅ:</label>
+        <input type="file" name="id_front" accept="image/*" required>
+      </div>
 
-            <!-- የመታወቂያ ማስገቢያ -->
-            <div class="section-title">
-                <i class="fa-solid fa-address-card"></i> የመታወቂያ ፎቶ (የፊት እና የጀርባ)
-            </div>
+      <div class="input-box">
+        <label>የመታወቂያ ጀርባ ገፅ:</label>
+        <input type="file" name="id_back" accept="image/*" required>
+      </div>
 
-            <div class="input-group">
-                <div class="input-box">
-                    <label>የመታወቂያ ፊት ገፅ <span class="required">*</span></label>
-                    <div class="file-upload">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <span>የፊቱን ፎቶ እዚህ ያስገቡ</span>
-                        <input type="file" accept="image/*" required>
-                    </div>
-                </div>
-                <div class="input-box">
-                    <label>የመታወቂያ ጀርባ ገፅ <span class="required">*</span></label>
-                    <div class="file-upload">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <span>የጀርባውን ፎቶ እዚህ ያስገቡ</span>
-                        <input type="file" accept="image/*" required>
-                    </div>
-                </div>
-            </div>
+      <div class="input-box">
+        <label>የክፍያ ስክሪንሾት (Receipt):</label>
+        <input type="file" name="receipt" accept="image/*" required>
+      </div>
 
-            <!-- ክፍያ እና ስክሪንሾት -->
-            <div class="section-title">
-                <i class="fa-solid fa-wallet"></i> የክፍያ መረጃ
-            </div>
+      <button type="submit">ምዝገባውን ላክ</button>
+    </form>
+  </div>
 
-            <div class="payment-box">
-                <p><strong>የባንክ አካውንት መረጃ፡</strong></p>
-                <div class="bank-details">
-                    <p><i class="fa-solid fa-building-columns"></i> ንግድ ባንክ (CBE): <span>1000123456789</span></p>
-                    <p><i class="fa-solid fa-mobile-screen"></i> Telebirr: <span>0911223344</span></p>
-                </div>
-            </div>
-
-            <div class="input-box" style="margin-top: 15px;">
-                <label>የክፍያ ስክሪንሾት (Payment Screenshot) <span class="required">*</span></label>
-                <div class="file-upload">
-                    <i class="fa-solid fa-receipt"></i>
-                    <span>የከፈሉበትን Receipt/Screenshot ያስገቡ</span>
-                    <input type="file" accept="image/*" required>
-                </div>
-            </div>
-
-            <button type="submit" class="submit-btn">
-                <i class="fa-solid fa-paper-plane"></i> ምዝገባውን ጨርስ
-            </button>
-        </form>
-    </div>
   <script>
-    document.querySelector('form').addEventListener('submit', async function(e) {
+    document.getElementById('regForm').addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        const submitBtn = this.querySelector('button');
+        submitBtn.innerText = 'እየተላከ ነው...';
+        submitBtn.disabled = true;
 
         const formData = new FormData(this);
 
@@ -111,16 +102,20 @@
             const result = await response.json();
 
             if (result.success) {
-                alert('ምዝገባዎ ተሳክቷል! መረጃዎ ደርሶናል።');
+                alert('ምዝገባዎ በስኬት ተልኳል!');
+                this.reset();
             } else {
-                alert('ችግር ተፈጥሯል፣ እባክዎ ድጋሚ ይሞክሩ።');
+                alert('ስህተት አለ፣ እባክዎ ድጋሚ ይሞክሩ።');
             }
         } catch (error) {
             console.error(error);
             alert('ከሰርቨር ጋር መገናኘት አልተቻለም!');
+        } finally {
+            submitBtn.innerText = 'ምዝገባውን ላክ';
+            submitBtn.disabled = false;
         }
     });
   </script>
-    
+
 </body>
 </html>
