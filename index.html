@@ -96,6 +96,31 @@
             </button>
         </form>
     </div>
+  <script>
+    document.querySelector('form').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert('ምዝገባዎ ተሳክቷል! መረጃዎ ደርሶናል።');
+            } else {
+                alert('ችግር ተፈጥሯል፣ እባክዎ ድጋሚ ይሞክሩ።');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('ከሰርቨር ጋር መገናኘት አልተቻለም!');
+        }
+    });
+  </script>
+    
 </body>
 </html>
