@@ -15,26 +15,31 @@ const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 app.post('/api/register', upload.any(), async (req, res) => {
     try {
-        // 1. የጽሁፍ መረጃዎችን ማዘጋጀትና መላክ
+        // 1. የጽሁፍ መረጃዎችን ማዘጋጀት
         let text = `📝 *አዲስ ምዝገባ ደርሷል*\n\n`;
         
-        for (const key of Object.keys(req.body)) {
-            text += `• *${key}:* ${req.body[key]}\n`;
+        if (req.body && Object.keys(req.body).length > 0) {
+            for (const [key, value] of Object.entries(req.body)) {
+                text += `• *${key}:* ${value}\n`;
+            }
+        } else {
+            text += `⚠️ ምንም የጽሁፍ መረጃ አልተላከም።`;
         }
 
+        // ፅሁፉን መላክ
         await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             chat_id: CHAT_ID,
             text: text,
             parse_mode: 'Markdown'
         });
 
-        // 2. ፎቶዎችን እያንዳንዳቸውን ወደ ቦቱ መላክ
+        // 2. ፎቶዎችን መላክ
         if (req.files && req.files.length > 0) {
             for (const file of req.files) {
                 const form = new FormData();
                 form.append('chat_id', CHAT_ID);
-                form.append('caption', `📷 የተላከ ፎቶ: ${file.fieldname}`);
-                form.append('photo', file.buffer, { filename: file.originalname || 'image.jpg' });
+                form.append('caption', `📷 ፎቶ: ${file.fieldname}`);
+                form.append('photo', file.buffer, { filename: file.originalname || 'photo.jpg' });
 
                 await axios.post(
                     `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,
@@ -46,7 +51,7 @@ app.post('/api/register', upload.any(), async (req, res) => {
 
         res.json({ success: true, message: 'ምዝገባው ተሳክቷል!' });
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Error Details:', error.response ? error.response.data : error.message);
         res.status(500).json({ success: false, message: 'ስህተት ተፈጥሯል' });
     }
 });
