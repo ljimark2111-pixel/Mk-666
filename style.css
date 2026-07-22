@@ -1,0 +1,193 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.registration-container {
+    background: #ffffff;
+    width: 100%;
+    max-width: 650px;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.header-icon {
+    font-size: 45px;
+    color: #0052D4;
+    margin-bottom: 10px;
+}
+
+.form-header h2 {
+    color: #1a253f;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.form-header p {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.section-title {
+    color: #0052D4;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 20px 0 10px 0;
+    border-bottom: 2px solid #eef2f5;
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.input-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-box label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.required {
+    color: #e74c3c;
+}
+
+.input-box input[type="text"],
+.input-box input[type="tel"] {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid #dcdfe6;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.3s;
+    outline: none;
+}
+
+.input-box input:focus {
+    border-color: #0052D4;
+    box-shadow: 0 0 8px rgba(0, 82, 212, 0.2);
+}
+
+/* Custom File Upload Design */
+.file-upload {
+    position: relative;
+    border: 2px dashed #0052D4;
+    background: #f4f8ff;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.file-upload:hover {
+    background: #e6f0ff;
+}
+
+.file-upload i {
+    font-size: 22px;
+    color: #0052D4;
+}
+
+.file-upload span {
+    font-size: 12px;
+    color: #555;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Payment Box */
+.payment-box {
+    background: #eef5ff;
+    border-left: 4px solid #0052D4;
+    padding: 12px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.bank-details {
+    margin-top: 5px;
+}
+
+.bank-details p {
+    margin: 3px 0;
+    color: #444;
+}
+
+.bank-details span {
+    font-weight: bold;
+    color: #0052D4;
+}
+
+/* Button */
+.submit-btn {
+    width: 100%;
+    background: #0052D4;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.submit-btn:hover {
+    background: #003bb5;
+    box-shadow: 0 5px 15px rgba(0, 82, 212, 0.4);
+}
+
+/* Responsive adjustment for Mobile */
+@media (max-width: 500px) {
+    .input-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
