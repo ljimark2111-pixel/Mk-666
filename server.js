@@ -84,36 +84,55 @@ app.get('/api/status/:userId', (req, res) => {
 // 3. ቴሌግራም ላይ አዝራር (Button) ሲጫን የሚሰራ Webhook/Polling handler
 app.post('/api/telegram-webhook', async (req, res) => {
     try {
-        const callbackQuery = req.body.callback_query;
-        if (callbackQuery) {
+        const update = req.body;
+
+        if (update.callback_query) {
+            const callbackQuery = update.callback_query;
             const data = callbackQuery.data;
             const messageId = callbackQuery.message.message_id;
+            const callbackQueryId = callbackQuery.id;
 
             if (data.startsWith('approve_')) {
                 const userId = data.replace('approve_', '');
                 if (registrations[userId]) registrations[userId].status = 'approved';
 
+                // 1. ለቴሌግራምህ ማሳወቂያ (Popup/Toast) እንዲልክልህ
+                await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
+                    callback_query_id: callbackQueryId,
+                    text: '✅ ምዝገባው በስኬት ጸድቋል!'
+                });
+
+                // 2. በቴሌግራም ላይ ያለው መልእክት ላይ "APPROVED" ብሎ እንዲቀይረው
                 await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/editMessageText`, {
                     chat_id: CHAT_ID,
                     message_id: messageId,
-                    text: `${callbackQuery.message.text}\n\n✅ *ተጸድቋል (Approved)*`,
+                    text: `${callbackQuery.message.text}\n\n✅ *ይህ ምዝገባ ተጽድቋል (Approved)*`,
                     parse_mode: 'Markdown'
                 });
+
             } else if (data.startsWith('reject_')) {
                 const userId = data.replace('reject_', '');
                 if (registrations[userId]) registrations[userId].status = 'rejected';
 
+                // 1. ለቴሌግራምህ ማሳወቂያ እንዲልክልህ
+                await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
+                    callback_query_id: callbackQueryId,
+                    text: '❌ ምዝገባው ተሰርዟል!'
+                });
+
+                // 2. በቴሌግራም ላይ ያለው መልእክት ላይ "REJECTED" ብሎ እንዲቀይረው
                 await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/editMessageText`, {
                     chat_id: CHAT_ID,
                     message_id: messageId,
-                    text: `${callbackQuery.message.text}\n\n❌ *ተሰርዟል (Rejected)*`,
+                    text: `${callbackQuery.message.text}\n\n❌ *መረጃው የተሳሳተ ስለሆነ ተሰርዟል (Rejected)*`,
                     parse_mode: 'Markdown'
                 });
             }
         }
+
         res.sendStatus(200);
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error('Webhook Error:', error);
         res.sendStatus(500);
     }
 });
