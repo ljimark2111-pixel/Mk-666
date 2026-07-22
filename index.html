@@ -206,7 +206,7 @@
     </form>
   </div>
 
-  <script>
+    <script>
     function updateFileName(input, labelId) {
       if (input.files && input.files[0]) {
         document.getElementById(labelId).innerText = "✅ " + input.files[0].name;
@@ -231,26 +231,32 @@
             const result = await response.json();
 
             if (result.success) {
-                // መረጃው በተሳካ ሁኔታ ከተላከ በኋላ የማረጋገጫ ሁኔታን መከታተል
+                // መረጃው ለቴሌግራም በስኬት ከተላከ በኋላ ብቻ ነው ውሳኔ የሚጠብቀው
                 submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> መረጃዎ በመገምገም ላይ ነው...';
                 
                 const userId = result.userId;
                 
-                // በየ 3 ሰከንዱ ሰርቨሩን መጠየቅ (Check Approval Status)
-                const checkInterval = setInterval(async () => {
-                    const statusRes = await fetch(`/api/status/${userId}`);
-                    const statusData = await statusRes.json();
+                // ሰርቨሩን መጠየቅ የሚጀምረው ከ 5 ሰከንድ በኋላ ነው (ቦቱ ጋር ደርሶ አንተ እንድታየው ጊዜ ለመስጠት)
+                setTimeout(() => {
+                    const checkInterval = setInterval(async () => {
+                        try {
+                            const statusRes = await fetch(`/api/status/${userId}`);
+                            const statusData = await statusRes.json();
 
-                    if (statusData.status === 'approved') {
-                        clearInterval(checkInterval);
-                        alert('🎉 ምዝገባዎ ተጸድቋል!');
-                        window.location.href = '/home.html'; // ወደ Home Page መውሰጃ
-                    } else if (statusData.status === 'rejected') {
-                        clearInterval(checkInterval);
-                        alert('❌ የላኩት ፋይል/መረጃ ትክክል ስላልሆነ አልተቀበልነውም። እባክዎ በትክክል ድጋሚ ይሙሉ!');
-                        location.reload();
-                    }
-                }, 3000);
+                            if (statusData.status === 'approved') {
+                                clearInterval(checkInterval);
+                                alert('🎉 ምዝገባዎ ተጸድቋል!');
+                                window.location.href = '/home.html';
+                            } else if (statusData.status === 'rejected') {
+                                clearInterval(checkInterval);
+                                alert('⚠️ የላኩት ፋይል ወይም መረጃ የተሳሳተ ነው። እባክዎ ትክክለኛ መረጃ እና ፎቶዎችን አዘጋጅተው ድጋሚ ይሙሉ!');
+                                location.reload();
+                            }
+                        } catch (err) {
+                            console.error('Status check error:', err);
+                        }
+                    }, 3000); // በየ 3 ሰከንዱ ያረጋግጣል
+                }, 2000);
 
             } else {
                 alert('ስህተት አለ፣ እባክዎ ድጋሚ ይሞክሩ።');
@@ -259,13 +265,12 @@
             }
         } catch (error) {
             console.error(error);
-            alert('⚠️ የላኩት ፋይል ወይም መረጃ የተሳሳተ ነው። እባክዎ ትክክለኛ መረጃ እና ፎቶዎችን አዘጋጅተው ድጋሚ ይሙሉ!');
+            alert('እባክዎ የኢንተርኔት ኮኔክሽንዎን አረጋግጠው ድጋሚ ይሞክሩ!');
             submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ምዝገባውን ላክ';
             submitBtn.disabled = false;
         }
     });
-                          </script>
+    </script>
   
-
 </body>
 </html>
