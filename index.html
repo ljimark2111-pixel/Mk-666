@@ -207,19 +207,17 @@
   </div>
 
   <script>
-    // ፎቶ ሲመረጥ ስሙን እንዲያሳይ የሚያደርግ
     function updateFileName(input, labelId) {
       if (input.files && input.files[0]) {
         document.getElementById(labelId).innerText = "✅ " + input.files[0].name;
       }
     }
 
-    // ፎርሙ ሲላክ ይሰራል
     document.getElementById('regForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const submitBtn = this.querySelector('.submit-btn');
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> እየተላከ ነው...';
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> መረጃው እየተላከ ነው...';
         submitBtn.disabled = true;
 
         const formData = new FormData(this);
@@ -233,24 +231,41 @@
             const result = await response.json();
 
             if (result.success) {
-                alert('ምዝገባዎ በስኬት ተልኳል!');
-                this.reset();
-                // Reset file labels
-                document.getElementById('label-id-front').innerText = "የፊቱን ፎቶ እዚህ ያስገቡ";
-                document.getElementById('label-id-back').innerText = "የጀርባውን ፎቶ እዚህ ያስገቡ";
-                document.getElementById('label-receipt').innerText = "የከፈሉበትን Receipt/Screenshot ያስገቡ";
+                // መረጃው በተሳካ ሁኔታ ከተላከ በኋላ የማረጋገጫ ሁኔታን መከታተል
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> መረጃዎ በመገምገም ላይ ነው...';
+                
+                const userId = result.userId;
+                
+                // በየ 3 ሰከንዱ ሰርቨሩን መጠየቅ (Check Approval Status)
+                const checkInterval = setInterval(async () => {
+                    const statusRes = await fetch(`/api/status/${userId}`);
+                    const statusData = await statusRes.json();
+
+                    if (statusData.status === 'approved') {
+                        clearInterval(checkInterval);
+                        alert('🎉 ምዝገባዎ ተጸድቋል!');
+                        window.location.href = '/home.html'; // ወደ Home Page መውሰጃ
+                    } else if (statusData.status === 'rejected') {
+                        clearInterval(checkInterval);
+                        alert('❌ የላኩት ፋይል/መረጃ ትክክል ስላልሆነ አልተቀበልነውም። እባክዎ በትክክል ድጋሚ ይሙሉ!');
+                        location.reload();
+                    }
+                }, 3000);
+
             } else {
                 alert('ስህተት አለ፣ እባክዎ ድጋሚ ይሞክሩ።');
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ምዝገባውን ላክ';
+                submitBtn.disabled = false;
             }
         } catch (error) {
             console.error(error);
             alert('ከሰርቨር ጋር መገናኘት አልተቻለም!');
-        } finally {
             submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ምዝገባውን ላክ';
             submitBtn.disabled = false;
         }
     });
-  </script>
+                          </script>
+  
 
 </body>
 </html>
