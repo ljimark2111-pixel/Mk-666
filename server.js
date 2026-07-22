@@ -13,42 +13,41 @@ app.use(express.static(__dirname));
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-// ፎቶዎችን እና ፅሁፎችን በአንድ ላይ ለመቀበል
 app.post('/api/register', upload.any(), async (req, res) => {
     try {
-        // 1. የፅሁፍ መረጃዎችን ማዘጋጀት
-        let text = `📝 *አዲስ ምዝገባ*\n\n`;
+        // 1. የጽሁፍ መረጃዎችን ማዘጋጀትና መላክ
+        let text = `📝 *አዲስ ምዝገባ ደርሷል*\n\n`;
+        
         for (const key of Object.keys(req.body)) {
             text += `• *${key}:* ${req.body[key]}\n`;
         }
 
-        // መጀመሪያ ፅሁፉን መላክ
         await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             chat_id: CHAT_ID,
             text: text,
             parse_mode: 'Markdown'
         });
 
-        // 2. የተላኩ ፎቶዎች ካሉ እያንዳንዳቸውን ወደ ቴሌግራም መላክ
+        // 2. ፎቶዎችን እያንዳንዳቸውን ወደ ቦቱ መላክ
         if (req.files && req.files.length > 0) {
             for (const file of req.files) {
-                const formData = new FormData();
-                formData.append('chat_id', CHAT_ID);
-                formData.append('caption', `📷 የተላከ ፎቶ (${file.fieldname})`);
-                formData.append('photo', file.buffer, { filename: file.originalname });
+                const form = new FormData();
+                form.append('chat_id', CHAT_ID);
+                form.append('caption', `📷 የተላከ ፎቶ: ${file.fieldname}`);
+                form.append('photo', file.buffer, { filename: file.originalname || 'image.jpg' });
 
                 await axios.post(
                     `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,
-                    formData,
-                    { headers: formData.getHeaders() }
+                    form,
+                    { headers: form.getHeaders() }
                 );
             }
         }
 
-        res.json({ success: true, message: 'ምዝገባው በስኬት ተጠናቋል!' });
+        res.json({ success: true, message: 'ምዝገባው ተሳክቷል!' });
     } catch (error) {
-        console.error('Error sending to Telegram:', error.message);
-        res.status(500).json({ success: false, message: 'መረጃውን መላክ አልተቻለም' });
+        console.error('Error:', error.message);
+        res.status(500).json({ success: false, message: 'ስህተት ተፈጥሯል' });
     }
 });
 
